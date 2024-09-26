@@ -1,14 +1,11 @@
 from fastapi import FastAPI
+from models.video_urls import VideoList
+from celery_app import process_video
 
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {"message": "Hello, World!"}
-
 @app.post("/transcribe-videos")
-async def transcribe_videos(urls: list[str]):
-    # Aquí más adelante se colocará la lógica de encolar las tareas
-    return {"message": "Received URLs", "urls": urls}
-
-#end
+async def transcribe_videos(video_list: VideoList):
+    for video in video_list.root:  # Accedemos a la lista de videos usando .root
+        process_video.delay(video.dict())  # Pasamos el video a Celery
+    return {"message": "Videos en proceso", "videos": video_list.root}
