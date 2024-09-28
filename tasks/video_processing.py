@@ -17,7 +17,7 @@ load_dotenv()
 model_url = "https://alphacephei.com/vosk/models/vosk-model-en-us-0.22.zip"
 model_dir = "/mnt/data/vosk_model"
 
-def ensure_vosk_model():
+""" def ensure_vosk_model():
     if not os.path.exists(model_dir):
         print("no existía el directorio /mnt/data/vosk_model")
         os.makedirs(model_dir)
@@ -38,10 +38,11 @@ def ensure_vosk_model():
         print(f"Modelo de Vosk disponible en: {model_subdir}")
         return model_subdir
     else:
-        raise Exception("No se encontró el modelo de Vosk después de descomprimirlo.")
+        raise Exception("No se encontró el modelo de Vosk después de descomprimirlo.") """
 
 # Llamar a la función para asegurarse de que el modelo esté disponible
-model_path = ensure_vosk_model()
+#model_path = ensure_vosk_model()
+model_path = "/mnt/data/vosk_model/vosk-model-en-us-0.2"
 
 model = Model(model_dir)
 
