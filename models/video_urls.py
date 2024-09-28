@@ -1,13 +1,16 @@
-from pydantic import BaseModel, RootModel
+from pydantic import BaseModel
+from typing import List
+from datetime import datetime
 
 # Definir el esquema para un video individual
 class VideoItem(BaseModel):
     id: int
-    origin: str
     download: str
-    processed: bool
-    source: str
+    url: str
+    channel_name: str
+    video_publication_date: datetime
+    added_at: datetime
 
 # Definir el modelo que contendrá la lista de videos
-class VideoList(RootModel[list[VideoItem]]):
-    pass
+class VideoList(BaseModel):
+    videos: List[VideoItem]
