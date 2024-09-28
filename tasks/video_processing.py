@@ -14,7 +14,7 @@ import json  # No olvides importar json para manejar la salida de la transcripci
 load_dotenv()
 
 # Asegúrate de que el modelo Vosk esté disponible
-model_url = "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+model_url = "https://alphacephei.com/vosk/models/vosk-model-en-us-0.22.zip"
 model_dir = "/mnt/data/vosk_model"
 
 def ensure_vosk_model():
