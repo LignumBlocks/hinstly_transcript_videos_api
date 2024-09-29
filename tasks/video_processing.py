@@ -44,7 +44,8 @@ model_dir = "/mnt/data/vosk_model"
 #model_path = ensure_vosk_model()
 model_path = "/mnt/data/vosk_model/vosk-model-en-us-0.2"
 
-model = Model(model_dir)
+#model = Model(model_dir)
+model = Model(model_path)
 
 # Inicializar el proveedor de almacenamiento para transcripciones
 transcription_provider = PostgresTranscriptionProvider()
