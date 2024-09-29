@@ -34,7 +34,7 @@ def cleanup_files(video_output_path, audio_output_path):
 @worker_process_init.connect
 def init_worker(**kwargs):
     global model
-    model_path = "/mnt/data/vosk_model"
+    model_path = "/mnt/data/vosk_model_small"
     if os.path.exists(model_path):
         model = Model(model_path)
         print("Modelo de Vosk cargado en el worker.")
