@@ -14,37 +14,8 @@ import json  # No olvides importar json para manejar la salida de la transcripci
 load_dotenv()
 
 # Asegúrate de que el modelo Vosk esté disponible
-model_url = "https://alphacephei.com/vosk/models/vosk-model-en-us-0.22.zip"
-model_dir = "/mnt/data/vosk_model"
+model_path = "/mnt/data/vosk_model"
 
-""" def ensure_vosk_model():
-    if not os.path.exists(model_dir):
-        print("no existía el directorio /mnt/data/vosk_model")
-        os.makedirs(model_dir)
-        # Descargar y descomprimir el modelo
-        print("Descargando el modelo de Vosk...")
-        response = requests.get(model_url, stream=True)
-        with open("/mnt/data/vosk_model.zip", "wb") as file:
-            for chunk in response.iter_content(chunk_size=8192):
-                file.write(chunk)
-        print("Descarga completada. Descomprimiendo el modelo...")
-        with zipfile.ZipFile("/mnt/data/vosk_model.zip", 'r') as zip_ref:
-            zip_ref.extractall(model_dir)
-    
-    # Detectar el subdirectorio descomprimido
-    subdirs = [d for d in os.listdir(model_dir) if os.path.isdir(os.path.join(model_dir, d))]
-    if subdirs:
-        model_subdir = os.path.join(model_dir, subdirs[0])  # Tomar el primer subdirectorio
-        print(f"Modelo de Vosk disponible en: {model_subdir}")
-        return model_subdir
-    else:
-        raise Exception("No se encontró el modelo de Vosk después de descomprimirlo.") """
-
-# Llamar a la función para asegurarse de que el modelo esté disponible
-#model_path = ensure_vosk_model()
-model_path = "/mnt/data/vosk_model/vosk-model-en-us-0.2"
-
-#model = Model(model_dir)
 model = Model(model_path)
 
 # Inicializar el proveedor de almacenamiento para transcripciones
