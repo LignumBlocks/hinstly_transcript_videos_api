@@ -9,14 +9,10 @@ from services.storage_provider_transcriptions import PostgresTranscriptionProvid
 from datetime import datetime
 import subprocess
 import json  # No olvides importar json para manejar la salida de la transcripción
+from celery.signals import worker_process_init
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
-
-# Asegúrate de que el modelo Vosk esté disponible
-model_path = "/mnt/data/vosk_model"
-
-model = Model(model_path)
 
 # Inicializar el proveedor de almacenamiento para transcripciones
 transcription_provider = PostgresTranscriptionProvider()
@@ -33,10 +29,21 @@ def cleanup_files(video_output_path, audio_output_path):
             print(f"Archivo de audio {audio_output_path} eliminado correctamente.")
     except Exception as e:
         print(f"Error al eliminar los archivos temporales: {e}")
-        
+
+# Señal para cargar el modelo al iniciar el proceso del worker
+@worker_process_init.connect
+def init_worker(**kwargs):
+    global model
+    model_path = "/mnt/data/vosk_model"
+    if os.path.exists(model_path):
+        model = Model(model_path)
+        print("Modelo de Vosk cargado en el worker.")
+    else:
+        raise Exception(f"El modelo de Vosk no se encontró en {model_path}.")        
 
 @celery.task(bind=True)
 def process_video(self, video_data):
+    global model
     task_id = self.request.id
     download_url = video_data["download"]
     video_url = video_data["url"]
@@ -58,8 +65,9 @@ def process_video(self, video_data):
         if not audio_path:
             raise Exception(f"Error al extraer el audio del video: {download_url}")
 
+
         # 3. Transcribir el audio usando Vosk
-        transcription = transcribe_audio(audio_path)
+        transcription = transcribe_audio(audio_path, model)
         if not transcription:
             raise Exception(f"Error al transcribir el audio del video: {download_url}")
 
@@ -118,7 +126,7 @@ def extract_audio(video_path, audio_output_path):
     return audio_output_path
 
 # Transcribir el audio con Vosk
-def transcribe_audio(audio_path):
+def transcribe_audio(audio_path, model):
     recognizer = KaldiRecognizer(model, 16000)
 
     with open(audio_path, "rb") as audio_file:

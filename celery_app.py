@@ -1,12 +1,18 @@
 from celery import Celery
+from dotenv import load_dotenv
+import os
+# Cargar las variables de entorno desde el archivo .env
+load_dotenv()
+
+REDIS_URL = os.getenv("REDIS_URL")
 
 # Conexión a Redis en localhost (127.0.0.1) en el puerto predeterminado 6379
 celery = Celery(
     "tasks",
     #broker="redis://localhost:6379/0", 
     #backend="redis://localhost:6379/0"
-    broker="redis://red-crs9955ds78s73e2o5og:6379/0", 
-    backend="redis://red-crs9955ds78s73e2o5og:6379/0"
+    broker=REDIS_URL, 
+    backend=REDIS_URL
 )
 
 # Importa las tareas
